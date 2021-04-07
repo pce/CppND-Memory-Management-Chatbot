@@ -60,18 +60,36 @@ ChatBot::ChatBot(const ChatBot& other) //noexcept // copy constructor
     std::cout << "ChatBot Copy Constructor" << std::endl;
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
-    // _image = new wxBitmap(other._image.GetFilename(), wxBITMAP_TYPE_PNG);
+    //  _currentNode = other._currentNode;
+
+    _image = new wxBitmap(*other._image);
+    // _chatLogic->SetChatbotHandle(this);
 }
 
 ChatBot::ChatBot(ChatBot&& other) // noexcept // move constructor
 {
     std::cout << "ChatBot Move Constructor" << std::endl;
-    // ...(std::exchange(other..., nullptr))
+    // ...( std::exchange(other..., nullptr))
+    _chatLogic = other._chatLogic;
+    _rootNode = other._rootNode;
+    //  _currentNode = other._currentNode;
+    _image = other._image;
+    // _chatLogic->SetChatbotHandle(this);
+    other._chatLogic = nullptr;
+    other._rootNode = nullptr;
+    //  _currentNode = nullptr;
+    other._image = NULL;
 }
 
 
 ChatBot &ChatBot::operator=(const ChatBot& other) // copy assignment
 {
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+
+    if (this == &other) {
+        return *this;
+    }
+
     return *this = ChatBot(other);
 }
 
@@ -79,6 +97,25 @@ ChatBot &ChatBot::operator=(ChatBot&& other) // noexcept // move assignment
 {
     std::cout << "ChatBot Move Assignment Operator" << std::endl;
     // std::swap(__, other.__);
+    if (this == &other) {
+      return *this;
+    }
+    // deallocate heap memory
+    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
+    {
+        delete _image;
+        _image = NULL;
+    }
+    _chatLogic = other._chatLogic;
+    _rootNode = other._rootNode;
+    //  _currentNode = other._currentNode;
+    _image = other._image;
+    // _chatLogic->SetChatbotHandle(this);
+    other._chatLogic = nullptr;
+    other._rootNode = nullptr;
+    //  _currentNode = nullptr;
+    other._image = NULL;
+
     return *this;
 }
 
