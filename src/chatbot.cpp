@@ -97,20 +97,15 @@ ChatBot &ChatBot::operator=(ChatBot&& other) // noexcept // move assignment
 {
     std::cout << "ChatBot Move Assignment Operator" << std::endl;
     // std::swap(__, other.__);
-    if (this == &other) {
-      return *this;
-    }
-    // deallocate heap memory
-    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
-    {
-        delete _image;
-        _image = NULL;
-    }
+    if (this == &other) return *this;
+    if (_image != nullptr) delete _image;
+
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
-    //  _currentNode = other._currentNode;
+    // _currentNode = other._currentNode;
     _image = other._image;
-    // _chatLogic->SetChatbotHandle(this);
+    _chatLogic->SetChatbotHandle(this);
+    
     other._chatLogic = nullptr;
     other._rootNode = nullptr;
     //  _currentNode = nullptr;
